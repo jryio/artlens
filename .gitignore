@@ -1,5 +1,6 @@
 # Based on https://raw.githubusercontent.com/github/gitignore/main/Node.gitignore
 
+index.js
 # Logs
 
 logs
@@ -173,4 +174,3 @@ dist
 
 # Finder (MacOS) folder config
 .DS_Store
-
