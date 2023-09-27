@@ -36,15 +36,30 @@ function nextTransition(idx: number, mainImage: HTMLElement) {
   mainImage.style.transitionDuration = `${t.minDuration}ms`;
   mainImage.style.transitionTimingFunction = "ease-in"
   setTimeout(() => {
-    console.log({ t })
+    console.log({ t });
     // create callback accepting input for next transition
-    document.addEventListener("click", () => {
+    let forward = () => {
       if (idx < transforms.length) {
         nextTransition(idx+1, mainImage);
       }
-    })
-  }, t.minDuration)
+    }
+    let backward = () => {
+      if (idx > 0) {
+        nextTransition(idx-1, mainImage);
+      }
+    }
+    document.addEventListener("click", () => {
+      removeEventListener("contextmenu", backward);
+      forward();
+    }
+    );
+    document.addEventListener("contextmenu", (event) => {
+      event.preventDefault();
+      removeEventListener("click", forward);
+      backward();
+    });
 
+  }, t.minDuration)
 }
 
 if (mainImage) {
@@ -58,6 +73,7 @@ if (mainImage) {
 //      2. transform: duration make this configurable 
 //      3. some pattern for triggering the transition 
 //          -- duration of the transition should have no movement 
+//   4. can we go backwards with right click 
 // 
 // transitions movements
 //    
