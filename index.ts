@@ -18,23 +18,52 @@ console.log({ mainImage });
 // transform: (scale, translateX,Y,Z, rotate, etc.)
 const transitionDelay = 1000
 
+/*
+  Transform: { transform: string, transformOrigin: string, minDuration: int};
+*/
 const transforms = [
-  { transform: "scale(0.75)", transformOrigin: "left" },
-  { transform: "scale(2)", transformOrigin: "right" },
-  { transform: "scale(1)", transformOrigin: "top" },
+  { transform: "scale(0.75)", transformOrigin: "left", minDuration: 300 },
+  { transform: "scale(2)", transformOrigin: "right", minDuration: 300 },
+  { transform: "scale(1)", transformOrigin: "top", minDuration: 300 },
 ]
 
-// Loop through transitions
-for (const [index, t] of transforms.entries()) {
 
-  if (mainImage) {
-    // Delay
-    setTimeout(() => {
+
+function nextTransition(idx: number, mainImage: HTMLElement) {
+  let t = transforms[idx];
+  mainImage.style.transformOrigin = t.transformOrigin
+  mainImage.style.transform = t.transform
+  mainImage.style.transitionDuration = `${t.minDuration}ms`;
+  mainImage.style.transitionTimingFunction = "ease-in"
+  setTimeout(() => {
+    console.log({ t })
+    // create callback accepting input for next transition
+    document.addEventListener("click", () => {
+      if (idx < transforms.length) {
+        nextTransition(idx+1, mainImage);
+      }
+    })
+  }, t.minDuration)
+
+}
+
+if (mainImage) {
+ nextTransition(0, mainImage);
+}
+
+
+// Standard format for the transform for the computer 
+//  left,right,top maybe its not precise enough (or maybe that's all we need)
+//      1. transform: scale | transformOrigin (x, y)
+//      2. transform: duration make this configurable 
+//      3. some pattern for triggering the transition 
+//          -- duration of the transition should have no movement 
+// 
+// transitions movements
+//    
+/*
       mainImage.style.transformOrigin = t.transformOrigin
       mainImage.style.transform = t.transform
       mainImage.style.transitionDuration = "300ms"
       mainImage.style.transitionTimingFunction = "ease-in"
-      console.log({ t })
-    }, index * transitionDelay)
-  }
-}
+*/
