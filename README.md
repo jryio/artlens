@@ -10,7 +10,7 @@ To run:
 
 ```sh
 # Run Bun in development (watch for changes and rebuild)
-bun bundle index.ts --watch --outfile=index.js --target=browser
+bun build index.ts --watch --outfile=index.js --target=browser
 ```
 
 
