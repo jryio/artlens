@@ -11,8 +11,43 @@
 //
 // https://www.typescriptlang.org/docs/handbook/triple-slash-directives.html#-reference-lib-
 
+import { SelectionHandler } from './selection.ts'
+
 const mainImage = document.getElementById("main-image")
-console.log({ mainImage });
+const selectionBox = document.getElementById("selection-box")
+console.log({ mainImage, selectionBox })
+if (mainImage && selectionBox) {
+  const handler = new SelectionHandler(mainImage, selectionBox)
+  handler.onEndSelection = (start, end, { x, y }) => {
+    console.log("selection center", { x, y })
+
+    const top = Math.min(start.y, end.y)
+    const left = Math.min(start.x, end.x)
+    const right = Math.max(start.x, end.x)
+    const bottom = Math.max(start.y, end.y)
+    const width = Math.abs(right - left)
+    const height = Math.abs(bottom - top)
+
+    const selectionRect = { width, height }
+    const imgRect = mainImage.getBoundingClientRect()
+
+    const scale = Math.min(imgRect.width / selectionRect.width, imgRect.height / selectionRect.height)
+
+    const transformOrigin = `${x}px ${y}px`
+    const transform = `scale(${scale})`
+    console.log({ transformOrigin, transform })
+
+    // const t = { transform: "scale(0.75)", transformOrigin: "left", minDuration: 300 }
+
+    mainImage.style.transform = transform
+    mainImage.style.transformOrigin = transformOrigin
+    mainImage.style.transitionDuration = `500ms`
+    mainImage.style.transitionTimingFunction = "linear"
+  }
+  // const scaleToFit = handler.getScaleToFit()
+}
+
+// TODO: Setup selection handlers on image
 
 // transform-origin: center, top left, etc.
 // transform: (scale, translateX,Y,Z, rotate, etc.)
@@ -40,12 +75,12 @@ function nextTransition(idx: number, mainImage: HTMLElement) {
     // create callback accepting input for next transition
     let forward = () => {
       if (idx < transforms.length) {
-        nextTransition(idx+1, mainImage);
+        nextTransition(idx + 1, mainImage);
       }
     }
     let backward = () => {
       if (idx > 0) {
-        nextTransition(idx-1, mainImage);
+        nextTransition(idx - 1, mainImage);
       }
     }
     document.addEventListener("click", () => {
@@ -63,20 +98,20 @@ function nextTransition(idx: number, mainImage: HTMLElement) {
 }
 
 if (mainImage) {
- nextTransition(0, mainImage);
+  // nextTransition(0, mainImage);
 }
 
 
-// Standard format for the transform for the computer 
+// Standard format for the transform for the computer
 //  left,right,top maybe its not precise enough (or maybe that's all we need)
 //      1. transform: scale | transformOrigin (x, y)
-//      2. transform: duration make this configurable 
-//      3. some pattern for triggering the transition 
-//          -- duration of the transition should have no movement 
-//   4. can we go backwards with right click 
-// 
+//      2. transform: duration make this configurable
+//      3. some pattern for triggering the transition
+//          -- duration of the transition should have no movement
+//   4. can we go backwards with right click
+//
 // transitions movements
-//    
+//
 /*
       mainImage.style.transformOrigin = t.transformOrigin
       mainImage.style.transform = t.transform
