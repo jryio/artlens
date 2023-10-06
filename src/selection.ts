@@ -108,8 +108,8 @@ export class SelectionHandler {
     self.selectionState = SelectionState.None
     // self.start = undefined
     // self.end = undefined
-    self.box.hidden = true
-    self.clearRect()
+    // self.box.hidden = true
+    // self.clearRect()
 
     self.target.style.userSelect = 'none'; // if there's text
     self.target.style.webkitUserSelect = 'none'; // safari

@@ -13,9 +13,11 @@
 
 import { SelectionHandler } from './selection.ts'
 
+// DOM Elements
 const mainImage = document.getElementById("main-image")
 const selectionBox = document.getElementById("selection-box")
 console.log({ mainImage, selectionBox })
+
 if (mainImage && selectionBox) {
   const handler = new SelectionHandler(mainImage, selectionBox)
   handler.onEndSelection = (start, end, { x, y }) => {
@@ -47,7 +49,46 @@ if (mainImage && selectionBox) {
   // const scaleToFit = handler.getScaleToFit()
 }
 
-// TODO: Setup selection handlers on image
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // transform-origin: center, top left, etc.
 // transform: (scale, translateX,Y,Z, rotate, etc.)
